@@ -8,30 +8,31 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
-@Table(name="students")
+@Table(name = "students")
 public class Student {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name="studentFirstName")
+
+    @Column(name = "studentFirstName")
     private String firstName;
-    @Column(name="studentLastName")
+    @Column(name = "studentLastName")
     private String lastName;
     private String email;
+
     @Column(columnDefinition = "DATE")
-private LocalDate birthDate;
-    @Column(columnDefinition = "Time")
-private LocalTime birthTime;
+    private LocalDate birthDate;
+    @Column(columnDefinition = "TIME")
+    private LocalTime birthTime;
     @Column(columnDefinition = "TIMESTAMP")
-private LocalDateTime birthDateTime;
-   //@Enumerated(EnumType.ORDINAL)
+    private LocalDateTime birthDateTime;
+
     @Enumerated(EnumType.STRING)
+//    @Enumerated(EnumType.ORDINAL)
     private Gender gender;
 
-@Transient
+    @Transient
     private String city;
 
 }
-
-
-
