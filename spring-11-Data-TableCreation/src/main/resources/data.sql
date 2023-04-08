@@ -1,2 +1,9 @@
-insert into EMPLOYEES(id,name)
-values(1,'Mike');
+INSERT INTO EMPLOYEES(id,name)
+VALUES(1,'Mike');
+
+
+INSERT INTO student(first_name,last_name,email)
+VALUES('Mike','Smith','mike@cydeo.com');
+
+INSERT INTO student(first_name,last_name,email)
+VALUES('Tom','Hanks','tom@cydeo.com');
