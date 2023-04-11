@@ -18,4 +18,6 @@ List<Region>findByCountryContainsOrderByRegionDesc(String country);
 //Display top 2 regions in United State
     List<Region>findTop2ByCountry(String country);
 
+    List<Region>findTopByCountryContainsOrderByCountry(String country);
+
 }
