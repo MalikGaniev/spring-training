@@ -34,7 +34,7 @@ private final EmployeeRepository employeeRepository;
         System.out.println("Find divisions top 3 distinct that contains "+departmentRepository.findDistinctTop3ByDivisionContainingIgnoreCase("Hea"));
         System.out.println("------------------Employees------------------------");
         System.out.println("Find by email"+employeeRepository.findByEmail("abendelowg@google.com.hk"));
-        System.out.println("Find employee"+employeeRepository.findEmployeeByFirstNameAndLastNameAndAndEmail("Berrie","Manueau","bmanueau0@dion.ne.jp"));
+        System.out.println("Find employee"+employeeRepository.findByFirstNameAndLastNameOrEmail("Berrie","Manueau","bmanueau0@dion.ne.jp"));
         System.out.println("retrive employee"+employeeRepository.retrieveEmployeeDetail());
 
     }
