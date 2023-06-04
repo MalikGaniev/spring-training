@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface WeatherApiClient {
 
     @GetMapping("/current")
-    WeatherDTO getCurrentWeather(@RequestParam(value = "access_key") String key,
+    WeatherDTO getCurrentWeather(@RequestParam(value = "access_key") String accesskey,
                                  @RequestParam(value = "query") String city);
 
 }

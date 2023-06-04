@@ -16,7 +16,6 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class StudentDTO {
-
     @JsonIgnore
     private Long id;
 
@@ -26,15 +25,13 @@ public class StudentDTO {
 
     private String email;
     private String username;
-
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     private LocalDate birthday;
 
     private Status status;
-
-    @JsonManagedReference(value = "student-address-reference")           // defaultReference
+    @JsonManagedReference(value = "student-address-reference")
     private AddressDTO address;
 
     private ParentDTO parent;

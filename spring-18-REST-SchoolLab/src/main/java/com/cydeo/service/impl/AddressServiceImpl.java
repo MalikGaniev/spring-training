@@ -1,5 +1,6 @@
 package com.cydeo.service.impl;
 
+import com.cydeo.client.FlagApiClient;
 import com.cydeo.client.WeatherApiClient;
 import com.cydeo.dto.AddressDTO;
 import com.cydeo.dto.WeatherDTO;
@@ -16,18 +17,19 @@ import java.util.stream.Collectors;
 
 @Service
 public class AddressServiceImpl implements AddressService {
-
+   @Value("${access_key}")
+   private String accessKey;
     private final AddressRepository addressRepository;
     private final MapperUtil mapperUtil;
+
     private final WeatherApiClient weatherApiClient;
+    private final FlagApiClient flagApiClient;
 
-    @Value("${access_key}")
-    private String access_key;
-
-    public AddressServiceImpl(AddressRepository addressRepository, MapperUtil mapperUtil, WeatherApiClient weatherApiClient) {
+    public AddressServiceImpl(AddressRepository addressRepository, MapperUtil mapperUtil, WeatherApiClient weatherApiClient, FlagApiClient flagApiClient) {
         this.addressRepository = addressRepository;
         this.mapperUtil = mapperUtil;
         this.weatherApiClient = weatherApiClient;
+        this.flagApiClient = flagApiClient;
     }
 
     @Override
@@ -40,14 +42,29 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public AddressDTO findById(Long id) throws Exception {
-
         Address foundAddress = addressRepository.findById(id)
                 .orElseThrow(() -> new Exception("No Address Found!"));
+      AddressDTO addressDTO= mapperUtil.convert(foundAddress, new AddressDTO());
 
-        AddressDTO addressDTO = mapperUtil.convert(foundAddress, new AddressDTO());
-        addressDTO.setCurrentTemperature(getCurrentWeather(addressDTO.getCity()).getCurrent().getTemperature());
+      addressDTO.setCurrentTemperature(retrieveTemperatureByCity(addressDTO.getCity()).getCurrent().getTemperature());
 
+
+
+
+//we will get the flag link base on the country provided than return dto
+        addressDTO.setFlag(retrieveFlagByCountry(addressDTO.getCountry()));
         return addressDTO;
+    }
+
+    private String retrieveFlagByCountry(String country) {
+   return flagApiClient.getCountryInfo(country).get(0).getFlags().getPng();
+
+
+    }
+
+    private WeatherDTO retrieveTemperatureByCity(String city) {
+    return  weatherApiClient.getCurrentWeather(accessKey,city);
+
 
     }
 
@@ -61,10 +78,7 @@ public class AddressServiceImpl implements AddressService {
 
         addressRepository.save(addressToSave);
 
-        AddressDTO updatedAddress = mapperUtil.convert(addressToSave, new AddressDTO());
-        updatedAddress.setCurrentTemperature(getCurrentWeather(updatedAddress.getCity()).getCurrent().getTemperature());
-
-        return updatedAddress;
+        return mapperUtil.convert(addressToSave, new AddressDTO());
 
     }
 
@@ -83,10 +97,6 @@ public class AddressServiceImpl implements AddressService {
 
         return mapperUtil.convert(addressToSave, new AddressDTO());
 
-    }
-
-    private WeatherDTO getCurrentWeather(String city) {
-        return weatherApiClient.getCurrentWeather(access_key, city);
     }
 
 }

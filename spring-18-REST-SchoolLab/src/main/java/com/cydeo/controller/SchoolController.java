@@ -28,35 +28,76 @@ public class SchoolController {
         this.addressService = addressService;
     }
 
+    //write a method for teachers and return as a list of teachers
+
     @GetMapping("/teachers")
-    public List<TeacherDTO> readAllTeacher() {
-        List<TeacherDTO> teachers = teacherService.findAll();
-        return teachers;
+    public List<TeacherDTO> allTeachers(){
+
+        List<TeacherDTO> teacherDTOS = teacherService.findAll();
+
+        return teacherDTOS;
     }
+
+    /* 7 MIN
+        create an endpoint for students, where json includes
+        "Students are successfully retrieved." message
+        code:200
+        success:true
+        and student data
+     */
 
     @GetMapping("/students")
-    public ResponseEntity<ResponseWrapper> readAllStudents() {
-        return ResponseEntity.ok(new ResponseWrapper("Students are successfully retrieved", studentService.findAll()));
+    public ResponseEntity<ResponseWrapper> readAllStudents(){
+        return ResponseEntity.ok(new ResponseWrapper("Students are successfully retrieved.",studentService.findAll()));
     }
 
+    /*  5 MIN
+        create a parents endpoint where status code is 202
+        additional header has "Parent" , "Returned"
+        and following json body structure
+       "Parents are successfully retrieved." message
+        code:202
+        success:true
+        and student data
+     */
+
     @GetMapping("/parents")
-    public ResponseEntity<ResponseWrapper> readAllParents() {
-        ResponseWrapper responseWrapper =
-                new ResponseWrapper(true, "Parents are retrieved successfully",
-                        HttpStatus.OK.value(), parentService.findAll());
-        return ResponseEntity.status(HttpStatus.OK).body(responseWrapper);
+    public ResponseEntity<ResponseWrapper> readAllParents(){
+        ResponseWrapper responseWrapper = new ResponseWrapper(true, "Parents are successfully retrieved.",
+                HttpStatus.ACCEPTED.value(),parentService.findAll());
+
+        return ResponseEntity
+                            .status(HttpStatus.ACCEPTED)
+                            .header("Parent","Returned")
+                            .body(responseWrapper);
     }
+
+    /*
+        create an endpoint for individual address information
+        /address/1
+        return status code 200
+        "address .. is successfully retrieved" message
+        and address information
+     */
 
     @GetMapping("/address/{id}")
     public ResponseEntity<ResponseWrapper> getAddress(@PathVariable("id") Long id) throws Exception {
-        AddressDTO addressDTO = addressService.findById(id);
-        return ResponseEntity.ok(new ResponseWrapper("Address is successfully retrieved", addressDTO));
+        //find the address to return
+        AddressDTO addressToReturn = addressService.findById(id);
+
+        return ResponseEntity.ok(new ResponseWrapper("Address "+id+" is successfully retrieved",addressToReturn));
     }
 
+    /*  HW
+        create and endpoint to update individual address information.
+        return updated address directly.
+     */
     @PutMapping("/address/{id}")
     public AddressDTO updateAddress(@PathVariable("id") Long id, @RequestBody AddressDTO addressDTO) throws Exception {
         addressDTO.setId(id);
-        return addressService.update(addressDTO);
-    }
 
+        AddressDTO updateAddress = addressService.update(addressDTO);
+
+        return updateAddress;
+    }
 }

@@ -17,7 +17,6 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AddressDTO {
-
     @JsonIgnore
     private Long id;
 
@@ -26,18 +25,18 @@ public class AddressDTO {
     private String state;
     private String city;
     private String postalCode;
-
+private String flag;
     private AddressType addressType;
 
-    @JsonBackReference(value = "student-address-reference")          // defaultReference
+    @JsonBackReference(value = "student-address-reference")
     private StudentDTO student;
 
-    @JsonBackReference(value = "parent-address-reference")          // defaultReference
+    @JsonBackReference(value = "parent-address-reference")
     private ParentDTO parent;
 
-    @JsonBackReference(value = "teacher-address-reference")          // defaultReference
+    @JsonBackReference(value = "teacher-address-reference")
     private TeacherDTO teacher;
 
-    private Integer currentTemperature;     // Weather information, which we will later get it from 3rd party API
+    private Integer currentTemperature;
 
 }
