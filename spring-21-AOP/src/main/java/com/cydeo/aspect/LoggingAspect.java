@@ -66,8 +66,8 @@ public void anyServiceOperation(){}
         logger.info("Before -> Method: {},Arguments: {}, Target: {}",
                 joinPoint.getSignature(),joinPoint.getArgs(),joinPoint.getTarget());
     }*/
-    @Pointcut("@annotation(org.springframework.web.bind.annotation.GetMapping)")
- public void afterReturningGetMappingAnnotation(){}
+ /*   @Pointcut("@annotation(org.springframework.web.bind.annotation.GetMapping)")
+ public void afterReturningGetMappingAnnotation(){}*/
 
 /*
 @AfterReturning(pointcut = "afterReturningGetMappingAnnotation()",returning = "result")
@@ -86,4 +86,22 @@ public void afterReturningGetMappingAnnotation(JoinPoint joinPoint, List<CourseD
 
 }*/
 
-}
+    @Pointcut("@annotation(com.cydeo.annotation.LoggingAnnotation)")
+    public void loggingAnnotationPC(){}
+
+    @Around("loggingAnnotationPC()")
+    public Object anyLoggingAnnotationOperation(ProceedingJoinPoint proceedingJoinPoint){
+        logger.info("Before -> Method: {}- Parameters: {}",proceedingJoinPoint
+                .getSignature().toShortString(),proceedingJoinPoint.getArgs());
+
+    Object result=null;
+
+    try {
+        result= proceedingJoinPoint.proceed();
+    }catch (Throwable throwable){
+        throwable.printStackTrace();
+    }
+logger.info("After - > Method: {} - Result: {}",
+        proceedingJoinPoint.getSignature().toShortString(), result.toString());
+    return result;
+}}
